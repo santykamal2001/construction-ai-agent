@@ -608,19 +608,11 @@ with st.sidebar:
 
     st.divider()
 
-    st.markdown('<div class="sidebar-label">Anthropic API Key</div>', unsafe_allow_html=True)
-    api_key_input = st.text_input(
-        "API Key", value=os.getenv("ANTHROPIC_API_KEY", ""),
-        type="password", placeholder="sk-ant-...", label_visibility="collapsed",
-    )
-    if api_key_input:
-        os.environ["ANTHROPIC_API_KEY"] = api_key_input
-
     api_ok = bool(os.getenv("ANTHROPIC_API_KEY"))
     if api_ok:
         st.markdown('<span class="sidebar-badge-green"><span class="live-dot"></span>API Connected</span>', unsafe_allow_html=True)
     else:
-        st.markdown('<span class="sidebar-badge-red">● API Key Required</span>', unsafe_allow_html=True)
+        st.markdown('<span class="sidebar-badge-red">⚠ API Key Missing — set ANTHROPIC_API_KEY in .env</span>', unsafe_allow_html=True)
 
     st.divider()
 
@@ -857,7 +849,7 @@ else:
 
             if ask_clicked and user_question.strip():
                 if not api_ok:
-                    st.markdown('<div class="safety-banner">⚠ Enter your Anthropic API key in the sidebar first.</div>', unsafe_allow_html=True)
+                    st.markdown('<div class="safety-banner">⚠ API key not found. Set ANTHROPIC_API_KEY in your .env file and restart the app.</div>', unsafe_allow_html=True)
                 else:
                     st.session_state.chat_history.append({
                         "role": "user",
@@ -1207,7 +1199,7 @@ else:
         )
         if st.button("Generate Project Summary", type="primary"):
             if not api_ok:
-                st.error("Enter your Anthropic API key in the sidebar first.")
+                st.error("API key not found. Set ANTHROPIC_API_KEY in your .env file and restart the app.")
             else:
                 with st.spinner("Analyzing all project documents…"):
                     summary = get_project_summary(selected_project_name)

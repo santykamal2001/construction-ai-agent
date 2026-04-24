@@ -8,11 +8,15 @@ CHROMA_DIR = DATA_DIR / "chroma_db"
 SQLITE_PATH = DATA_DIR / "metadata.db"
 
 # Chunking
-CHUNK_SIZE = 800        # characters (~200 tokens)
-CHUNK_OVERLAP = 150     # characters overlap between chunks
+CHUNK_SIZE = 1200       # larger chunks = more context per retrieval
+CHUNK_OVERLAP = 200     # wider overlap preserves cross-boundary context
 
-# Embedding
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"  # fast local model
+# Embedding — BGE-base outperforms MiniLM on MTEB by ~8 points
+EMBEDDING_MODEL = "BAAI/bge-base-en-v1.5"
+CHROMA_COLLECTION = "dest_docs_v2"   # new name avoids stale MiniLM vectors
+
+# Cross-encoder reranker — re-scores top-k candidates after ANN retrieval
+RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 # Claude API
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")

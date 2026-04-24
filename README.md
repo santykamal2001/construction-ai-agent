@@ -1,10 +1,10 @@
-# DEST AI Inspector
+# DEST AI Inspector — Backend
 
-> AI-powered document intelligence platform for construction project management.  
-> Ask natural language questions across inspection reports, proposals, blueprints, and field documents — get cited, source-traceable answers in seconds.
+> AI-powered RAG backend for construction document intelligence.  
+> FastAPI + ChromaDB + Claude Opus 4 — enterprise-grade retrieval with cross-encoder reranking.
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.35%2B-FF4B4B?logo=streamlit&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)
 ![Claude](https://img.shields.io/badge/Claude-Opus%204-8B5CF6?logo=anthropic&logoColor=white)
 ![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20DB-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -15,14 +15,62 @@
 
 Construction projects generate thousands of documents — inspection reports, safety audits, proposals, contracts, blueprints, RFIs, and field notes. Finding specific information manually takes hours.
 
-**DEST AI Inspector** indexes all of it and lets your team ask questions in plain English:
+**DEST AI Inspector backend** indexes everything and answers natural-language questions with source citations:
 
 - *"What safety violations were flagged in the bridge inspection last month?"*
 - *"Find all proposals we won from client Tylin between 2020 and 2025"*
 - *"Which projects have outstanding structural concerns?"*
 - *"Summarize the foundation inspection findings for Project C"*
 
-The system returns precise answers with **document citations** — so you always know exactly which file, page, and section the answer came from.
+Answers come back with **document citations, relevance scores, and latency metrics** — suitable for enterprise deployment.
+
+---
+
+## Architecture
+
+```
+┌──────────────────────────────────────────────────────────┐
+│               React UI (dest-ai-inspector)               │
+│    Ask AI │ Analytics │ Documents │ System               │
+└──────────────────────┬───────────────────────────────────┘
+                       │ HTTP / JSON
+         ┌─────────────▼──────────────┐
+         │       FastAPI (port 8000)  │
+         │  /health  /query  /index   │
+         │  /projects  /documents     │
+         │  /stats     /analytics     │
+         └──────┬───────────┬─────────┘
+                │           │
+     ┌──────────▼──┐   ┌────▼────────┐
+     │  RAG Pipeline│   │ SQLite DB   │
+     │  BGE Embed   │   │ (metadata)  │
+     │  ChromaDB    │   └─────────────┘
+     │  Reranker    │
+     └──────┬───────┘
+            │
+     ┌──────▼───────┐
+     │  Claude API  │
+     │  (answers)   │
+     └──────────────┘
+
+Ingestion Pipeline:
+  Folder Scan → Hash Check → Text Extract → Chunk (1200c / 200 overlap)
+              → BGE Embed (local) → ChromaDB → SQLite log
+```
+
+---
+
+## Performance Stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Embeddings | `BAAI/bge-base-en-v1.5` (768-dim) | ~8 pts better on MTEB vs MiniLM; asymmetric retrieval with instruction prefix |
+| Vector DB | ChromaDB `dest_docs_v2` | On-disk, no server; separate collection avoids mixing old MiniLM vectors |
+| Reranker | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Re-scores 24 candidates → returns top 8; major precision lift |
+| LLM | Claude Opus 4 | Best-in-class reasoning for construction domain |
+| Chunk size | 1200 chars / 200 overlap | Better context window utilisation vs old 800/150 |
+
+**Query flow:** embed query with BGE instruction prefix → retrieve 24 candidates → deduplicate → cross-encoder rerank → top 8 → Claude synthesis
 
 ---
 
@@ -32,53 +80,30 @@ The system returns precise answers with **document citations** — so you always
 |---|---|
 | **Multi-format ingestion** | PDF, DOCX, XLSX, CSV, PPTX, TXT, MD, RTF |
 | **OCR for scanned PDFs** | PaddleOCR automatically handles image-based documents |
-| **Semantic search** | Sentence-transformers embeddings + ChromaDB vector store |
+| **BGE semantic search** | `bge-base-en-v1.5` with query instruction prefix for asymmetric retrieval |
+| **Cross-encoder reranking** | `ms-marco-MiniLM-L-6-v2` re-scores candidates before sending to LLM |
 | **AI Q&A with citations** | Claude Opus 4 answers with source file + chunk references |
-| **Multi-turn chat** | Full conversation history within each session |
-| **Analytics dashboard** | Query trends, document stats, processing metrics |
-| **Deduplication** | MD5 hash-based — unchanged files are never re-processed |
+| **FastAPI REST server** | JSON API consumed by React UI — CORS-enabled for port 3001 |
+| **Analytics endpoint** | Query history, latency, relevance trends, file type distribution |
+| **Deduplication** | MD5 hash — unchanged files are never re-processed |
 | **Project isolation** | Each project folder is independently searchable |
 | **Safety flagging** | Automatic detection of safety-related keywords in answers |
+| **Secure API key** | Stored in `.env` only — never exposed to frontend or UI |
 
 ---
 
 ## Tech Stack
 
 ```
-Frontend          Streamlit (custom CSS — Stripe/Notion-inspired light theme)
+API Server        FastAPI + Uvicorn (port 8000)
 AI Model          Anthropic Claude Opus 4 (via API)
-Embeddings        sentence-transformers / all-MiniLM-L6-v2 (local, no API needed)
-Vector Database   ChromaDB (on-disk, no server required)
+Embeddings        BAAI/bge-base-en-v1.5 (local, 768-dim, no API needed)
+Reranker          cross-encoder/ms-marco-MiniLM-L-6-v2 (local)
+Vector Database   ChromaDB (on-disk, collection: dest_docs_v2)
 Metadata Store    SQLite
 PDF Extraction    PyMuPDF (text) + PaddleOCR (scanned/image pages)
 Office Docs       python-docx, openpyxl, python-pptx
-Visualization     Plotly
-```
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Streamlit UI                         │
-│   Dashboard │ Ask AI │ Documents │ Projects │ Analytics │
-└──────────────────────┬──────────────────────────────────┘
-                       │
-         ┌─────────────▼─────────────┐
-         │      RAG Pipeline         │
-         │  Query → Embed → Search   │
-         │  → Context → Claude API   │
-         └─────────────┬─────────────┘
-                       │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
-   ChromaDB        SQLite         Claude API
-  (vectors)      (metadata)      (answers)
-
-Ingestion Pipeline:
-  Folder Scan → Hash Check → Text Extract → Chunk (800c/150 overlap)
-              → Embed (local) → ChromaDB → SQLite log
+Legacy UI         Streamlit (app.py — functional on port 8501)
 ```
 
 ---
@@ -95,7 +120,7 @@ Ingestion Pipeline:
 git clone https://github.com/YOUR_USERNAME/construction-ai-agent.git
 cd construction-ai-agent
 
-# Run setup (creates venv + installs dependencies)
+# Create venv and install all dependencies
 chmod +x setup.sh && ./setup.sh
 ```
 
@@ -103,41 +128,61 @@ chmod +x setup.sh && ./setup.sh
 
 ```bash
 cp .env.example .env
-# Edit .env and add your Anthropic API key
+# Edit .env and set your key:
+# ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-### Run
+The key is loaded server-side only. It is never sent to or stored in the React frontend.
+
+### Start the FastAPI Server
 
 ```bash
-./run.sh
-# Opens at http://localhost:8501
+source venv/bin/activate
+uvicorn api:app --reload --port 8000
+```
+
+Verify it's running:
+```bash
+curl http://localhost:8000/health
+# {"status":"ok","api_connected":true}
 ```
 
 ---
 
-## Usage
+## API Endpoints
 
-### 1. Index a Project
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/health` | Backend status + Anthropic API key validation |
+| `GET` | `/projects` | List all indexed project folders with stats |
+| `POST` | `/index/{project}` | Trigger full index / reindex of a project |
+| `POST` | `/query` | RAG query with reranking → Claude answer |
+| `GET` | `/documents/{project}` | All indexed files with status and chunk count |
+| `GET` | `/stats/{project}` | File counts and chunk totals |
+| `GET` | `/analytics/{project}` | Query history, latency, type distribution |
 
-1. Open the **Projects** tab in the sidebar
-2. Enter the path to your project folder (containing PDFs, DOCX, etc.)
-3. Click **Process Project** — the pipeline extracts, chunks, and indexes all documents
-4. Status updates in real-time; large folders with scanned PDFs may take a few minutes
+### Query Request
 
-### 2. Ask Questions
+```json
+{
+  "question": "What safety issues were found?",
+  "project": "ProjectA_Bridge_Inspection",
+  "n_results": 8
+}
+```
 
-1. Open the **Ask AI** tab
-2. Select the project to search (or "All Projects" for cross-project queries)
-3. Type your question in natural language
-4. The answer includes:
-   - AI-generated response from Claude
-   - Source citations (file name + chunk)
-   - Confidence score
-   - Safety flag if relevant
+### Query Response
 
-### 3. Browse Documents
-
-The **Documents** tab shows all indexed files with status, chunk count, and file type.
+```json
+{
+  "answer": "The inspection found...",
+  "sources": [{ "file_name": "report.pdf", "relevance_score": 0.91, "excerpt": "..." }],
+  "chunks_used": 8,
+  "latency_ms": 1240,
+  "mean_relevance_score": 0.87,
+  "safety": false
+}
+```
 
 ---
 
@@ -145,23 +190,22 @@ The **Documents** tab shows all indexed files with status, chunk count, and file
 
 ```
 construction-ai-agent/
-├── app.py                  # Streamlit application (UI + routing)
+├── api.py                  # FastAPI server — REST API for React UI
+├── app.py                  # Streamlit UI (legacy — still functional)
 ├── src/
-│   ├── agent.py            # Claude API integration + RAG query engine
-│   ├── vector_store.py     # ChromaDB read/write operations
-│   ├── processor.py        # Main ingestion pipeline orchestrator
+│   ├── agent.py            # Claude RAG engine + cross-encoder reranking
+│   ├── vector_store.py     # ChromaDB + BGE embeddings (manual, with prefix)
+│   ├── processor.py        # Ingestion pipeline orchestrator
 │   ├── extractor.py        # Multi-format text extraction + OCR
 │   ├── chunker.py          # Text splitting with overlap
 │   ├── database.py         # SQLite schema + queries
 │   └── config.py           # Configuration constants
 ├── sample_data/            # Example construction documents
-│   ├── ProjectA_Bridge_Inspection/
-│   ├── ProjectB_Highway_Repair/
-│   └── ProjectC_Building_Foundation/
-├── .env.example            # Environment variable template
+├── .env.example            # Template — no real keys
+├── .env                    # Your API key — git-ignored
 ├── requirements.txt        # Python dependencies
 ├── setup.sh                # One-command environment setup
-└── run.sh                  # Start the application
+└── run.sh                  # Start Streamlit (legacy)
 ```
 
 ---
@@ -170,12 +214,14 @@ construction-ai-agent/
 
 All tunable parameters are in [src/config.py](src/config.py):
 
-| Parameter | Default | Description |
+| Parameter | Value | Description |
 |---|---|---|
-| `CHUNK_SIZE` | 800 chars | Text chunk size (~200 tokens) |
-| `CHUNK_OVERLAP` | 150 chars | Overlap between consecutive chunks |
-| `EMBEDDING_MODEL` | `all-MiniLM-L6-v2` | Local sentence-transformer model |
-| `CLAUDE_MODEL` | `claude-opus-4-6` | Anthropic model for Q&A |
+| `CHUNK_SIZE` | 1200 chars | Larger chunks for better context coverage |
+| `CHUNK_OVERLAP` | 200 chars | Overlap between consecutive chunks |
+| `EMBEDDING_MODEL` | `BAAI/bge-base-en-v1.5` | 768-dim, top MTEB benchmark performer |
+| `CHROMA_COLLECTION` | `dest_docs_v2` | Separate from legacy MiniLM collection |
+| `RERANKER_MODEL` | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Precision reranking model |
+| `CLAUDE_MODEL` | `claude-opus-4-6` | Anthropic model used for Q&A generation |
 | `MAX_WORKERS` | 4 | Parallel file processing workers |
 
 ---
@@ -194,18 +240,20 @@ All tunable parameters are in [src/config.py](src/config.py):
 
 ---
 
-## Security Notes
+## Security
 
-- Your documents never leave your machine — embeddings are generated locally
-- Only the final query + retrieved text chunks are sent to the Claude API
-- API key is stored in `.env` (never committed to git)
-- The `.gitignore` excludes all data directories and database files
+- Documents never leave your machine — embeddings are generated locally
+- Only the query + retrieved text chunks are sent to the Claude API
+- API key is in `.env` only — never committed, never sent to any frontend
+- `.gitignore` excludes `.env`, all data directories, and ChromaDB files
+- CORS is restricted to `http://localhost:3001` (React dev server)
 
 ---
 
-## Contributing
+## Pair With the React UI
 
-Pull requests are welcome. For major changes, please open an issue first.
+The companion React frontend lives in [`dest-ai-inspector`](../dest-ai-inspector).  
+Start this FastAPI server first, then run `npm run dev` in the React project.
 
 ---
 

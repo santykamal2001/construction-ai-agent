@@ -1,6 +1,5 @@
 """
-Claude-powered RAG agent for construction inspection queries.
-Retrieves relevant chunks from vector DB, then uses Claude to answer.
+Claude-powered RAG agent — BGE retrieval + cross-encoder reranking + Claude generation.
 """
 import logging
 import statistics
@@ -8,13 +7,27 @@ import time
 from typing import Optional
 
 import os
-
 import anthropic
 
-from src.config import CLAUDE_MODEL
+from src.config import CLAUDE_MODEL, RERANKER_MODEL
 from src.vector_store import search
 
 logger = logging.getLogger(__name__)
+
+_reranker = None
+
+def _get_reranker():
+    global _reranker
+    if _reranker is None:
+        try:
+            from sentence_transformers import CrossEncoder
+            _reranker = CrossEncoder(RERANKER_MODEL)
+            logger.info(f"Loaded reranker: {RERANKER_MODEL}")
+        except Exception as e:
+            logger.warning(f"Reranker unavailable: {e}")
+            _reranker = False
+    return _reranker if _reranker else None
+
 
 SYSTEM_PROMPT = """You are an expert AI assistant for Distinct Engineering Solutions, Inc., a civil engineering company specializing in construction and design.
 
@@ -42,25 +55,34 @@ Always structure your response clearly with:
 - Any safety warnings if applicable"""
 
 
+def _rerank(question: str, chunks: list, top_k: int) -> list:
+    """Re-score (query, chunk) pairs with cross-encoder and return top_k."""
+    reranker = _get_reranker()
+    if not reranker or not chunks:
+        return chunks[:top_k]
+    try:
+        pairs = [(question, c["text"]) for c in chunks]
+        scores = reranker.predict(pairs)
+        for i, c in enumerate(chunks):
+            c["rerank_score"] = float(scores[i])
+        ranked = sorted(chunks, key=lambda x: x["rerank_score"], reverse=True)
+        return ranked[:top_k]
+    except Exception as e:
+        logger.warning(f"Reranking failed, using vector order: {e}")
+        return chunks[:top_k]
+
+
 def query(
     question: str,
     project_folder: Optional[str] = None,
     n_results: int = 8,
-    stream: bool = False
 ) -> dict:
-    """
-    RAG query pipeline:
-    1. Retrieve relevant chunks from vector DB
-    2. Build context prompt
-    3. Call Claude API
-    4. Return answer with sources
-    """
     t_start = time.perf_counter()
 
-    # Step 1: Retrieve — fetch more than needed so deduplication still leaves enough unique content
-    chunks = search(question, project_folder=project_folder, n_results=max(n_results * 2, 16))
+    # Retrieve 3x candidates for reranker to pick from
+    candidates = search(question, project_folder=project_folder, n_results=max(n_results * 3, 24))
 
-    if not chunks:
+    if not candidates:
         return {
             "answer": "No relevant documents found. Please index a project folder first.",
             "sources": [],
@@ -72,66 +94,51 @@ def query(
             "source_files": [],
         }
 
-    # Step 2: Deduplicate near-identical chunks (e.g. repeated approval stamp templates)
-    # Also cap chunks per file so no single document dominates the context.
-    MAX_CHUNKS_PER_FILE = 3
-    unique_chunks = []
-    file_chunk_counts: dict = {}
-    for chunk in chunks:
-        text = chunk["text"].strip()
-        fname = chunk["file_name"]
+    # Deduplicate near-identical chunks (approval stamp templates etc.)
+    MAX_CHUNKS_PER_FILE = 6
+    unique: list = []
+    file_counts: dict = {}
 
-        if file_chunk_counts.get(fname, 0) >= MAX_CHUNKS_PER_FILE:
+    for chunk in candidates:
+        fname = chunk["file_name"]
+        if file_counts.get(fname, 0) >= MAX_CHUNKS_PER_FILE:
             continue
+        if any(_similarity(chunk["text"], k["text"]) > 0.85 for k in unique):
+            continue
+        unique.append(chunk)
+        file_counts[fname] = file_counts.get(fname, 0) + 1
 
-        is_duplicate = any(
-            _similarity(text, kept["text"]) > 0.85
-            for kept in unique_chunks
-        )
-        if not is_duplicate:
-            unique_chunks.append(chunk)
-            file_chunk_counts[fname] = file_chunk_counts.get(fname, 0) + 1
+    # Rerank with cross-encoder, then keep top n_results
+    final_chunks = _rerank(question, unique, top_k=n_results)
 
-    # Build context from unique chunks only
-    context_parts = []
-    seen_files = set()
-    for chunk in unique_chunks:
-        fname = chunk["file_name"]
-        score = chunk["relevance_score"]
-        context_parts.append(
-            f"--- Document: {fname} (relevance: {score}) ---\n{chunk['text']}"
-        )
-        seen_files.add(fname)
+    context = "\n\n".join(
+        f"--- Document: {c['file_name']} (relevance: {c['relevance_score']}) ---\n{c['text']}"
+        for c in final_chunks
+    )
 
-    context = "\n\n".join(context_parts)
+    user_message = (
+        f"Based on the following project documents, please answer this question:\n\n"
+        f"QUESTION: {question}\n\n"
+        f"PROJECT DOCUMENTS:\n{context}\n\n"
+        f"Please provide a clear, specific answer citing which documents contain the relevant information."
+    )
 
-    user_message = f"""Based on the following project documents, please answer this question:
-
-QUESTION: {question}
-
-PROJECT DOCUMENTS:
-{context}
-
-Please provide a clear, specific answer citing which documents contain the relevant information."""
-
-    # Step 3: Call Claude (read key at call time so sidebar input is picked up)
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
-
     try:
         response = client.messages.create(
             model=CLAUDE_MODEL,
             max_tokens=2048,
             system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_message}]
+            messages=[{"role": "user", "content": user_message}],
         )
         answer = response.content[0].text
     except anthropic.AuthenticationError:
-        answer = "⚠️ API key error. Please set your ANTHROPIC_API_KEY in the .env file."
+        answer = "⚠️ API key error. Set ANTHROPIC_API_KEY in your .env file."
     except Exception as e:
         logger.error(f"Claude API error: {e}")
         answer = f"Error calling AI model: {str(e)}"
 
-    scores = [c["relevance_score"] for c in unique_chunks]
+    scores = [c["relevance_score"] for c in final_chunks]
     latency_ms = int((time.perf_counter() - t_start) * 1000)
 
     return {
@@ -141,21 +148,20 @@ Please provide a clear, specific answer citing which documents contain the relev
                 "file_name": c["file_name"],
                 "file_path": c["file_path"],
                 "relevance_score": c["relevance_score"],
-                "excerpt": c["text"][:300] + "..." if len(c["text"]) > 300 else c["text"]
+                "excerpt": c["text"][:300] + "..." if len(c["text"]) > 300 else c["text"],
             }
-            for c in unique_chunks
+            for c in final_chunks
         ],
-        "chunks_used": len(unique_chunks),
+        "chunks_used": len(final_chunks),
         "latency_ms": latency_ms,
         "top_relevance_score": round(max(scores), 3) if scores else 0.0,
         "mean_relevance_score": round(statistics.mean(scores), 3) if scores else 0.0,
         "min_relevance_score": round(min(scores), 3) if scores else 0.0,
-        "source_files": list({c["file_name"] for c in unique_chunks}),
+        "source_files": list({c["file_name"] for c in final_chunks}),
     }
 
 
 def _similarity(a: str, b: str) -> float:
-    """Quick Jaccard similarity on word sets — enough to catch near-duplicate template chunks."""
     words_a = set(a.lower().split())
     words_b = set(b.lower().split())
     if not words_a or not words_b:
@@ -164,12 +170,11 @@ def _similarity(a: str, b: str) -> float:
 
 
 def get_project_summary(project_folder: str) -> str:
-    """Generate a high-level project summary from indexed documents."""
     result = query(
         "Give me a comprehensive summary of this project including: "
         "project type, location, current condition/status, key findings, "
         "safety concerns, and recommended next actions.",
         project_folder=project_folder,
-        n_results=10
+        n_results=10,
     )
     return result["answer"]
