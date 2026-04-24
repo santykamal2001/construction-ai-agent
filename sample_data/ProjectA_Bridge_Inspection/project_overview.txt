@@ -1,0 +1,51 @@
+PROJECT OVERVIEW DOCUMENT
+=========================
+Project Name: SR-45 Bridge Replacement / Rehabilitation Study
+Project ID: DEST-2024-001
+Client: Riverside County Department of Transportation
+Engineer of Record: Distinct Engineering Solutions, Inc.
+Project Manager: Michael Torres, P.E.
+
+STRUCTURE DETAILS:
+- Bridge Name: Millbrook Creek Crossing
+- Route: State Route 45
+- Structure Type: 3-Span Continuous Steel Plate Girder
+- Year Built: 1987
+- Total Length: 210 feet (3 spans: 65ft + 80ft + 65ft)
+- Width: 44 feet (2 lanes + shoulders)
+- Design Load: HS-20
+- Foundation Type: Drilled Shaft on Pier 1, Spread Footing on Pier 2
+- Waterway: Millbrook Creek (drainage area: 145 sq mi)
+- FEMA Flood Zone: AE (100-year floodplain)
+
+PROJECT HISTORY:
+- 1987: Original construction
+- 1998: Deck overlay (Type B modified)
+- 2009: Bearing pad replacement (all locations)
+- 2015: Scour countermeasures installed (Pier 1)
+- 2019: Paint system applied to steel girders
+- 2023: Pier 1 cap crack repair
+
+CURRENT PROJECT SCOPE:
+The county has initiated a Rehabilitation Study to determine whether the bridge should be:
+Option A: Major Rehabilitation (deck replacement, girder painting, substructure repairs)
+Option B: Full Replacement (new bridge with wider deck for future traffic growth)
+
+Preliminary cost estimates:
+- Option A: $2.1M - $2.8M
+- Option B: $8.5M - $11.2M
+
+TRAFFIC DATA:
+- Current ADT: 4,200 vehicles/day
+- Truck percentage: 8%
+- 20-year projected ADT: 6,800 vehicles/day
+
+ENVIRONMENTAL CONSIDERATIONS:
+- Millbrook Creek is designated as a sensitive habitat (steelhead trout)
+- Any in-water work requires CDFW 1602 permit
+- Work window: July 1 - September 30 (fish passage window)
+
+CONTACTS:
+- County Project Manager: David Kim, (951) 555-0142
+- DEST Project Manager: Michael Torres, (760) 555-0198
+- Field Inspector Coordinator: Lisa Park, (760) 555-0201

@@ -1,0 +1,84 @@
+PROJECT: SR-45 Bridge Over Millbrook Creek
+PROJECT ID: DEST-2024-001
+LOCATION: Highway SR-45, Mile Marker 12.3, Riverside County
+INSPECTION DATE: January 15, 2024
+INSPECTOR: James Harrington (License #CE-78342)
+INSPECTION TYPE: Routine Biannual Structural Inspection
+
+=== EXECUTIVE SUMMARY ===
+The SR-45 bridge over Millbrook Creek was inspected on January 15, 2024. The bridge is a 3-span continuous steel girder bridge built in 1987 with a total length of 210 feet. Overall condition rating: FAIR (Rating: 5/9).
+
+=== STRUCTURAL FINDINGS ===
+
+1. DECK CONDITION:
+   - Multiple transverse cracks observed on the bridge deck surface (Sections 2 and 3)
+   - Crack widths ranging from 0.5mm to 2.1mm
+   - Delamination detected in northwest quadrant, approximately 15 sq ft area
+   - Spalling near expansion joint at Station 2+45
+   - Pothole 8 inches diameter at the center lane (Station 1+82)
+   - Condition Rating: 5 (Fair)
+
+2. SUPERSTRUCTURE:
+   - Steel girders showing surface rust at mid-span (Girders G2, G3, G4)
+   - No section loss detected at this time — monitoring required
+   - Cross bracing intact and properly connected
+   - Bearing pads at Pier 1: slight lateral displacement (0.5 inches — within tolerance)
+   - Bearing pads at Pier 2: Good condition
+   - Condition Rating: 5 (Fair)
+
+3. SUBSTRUCTURE:
+   - Pier 1 (North): Minor cracking on pier cap, horizontal crack at 18 inches below bearing seat. Crack sealed with epoxy in previous inspection (July 2023) — re-inspection shows crack has not propagated.
+   - Pier 2 (South): Good condition, no cracking observed
+   - Abutments: Wingwall at North Abutment shows 3/8 inch separation from abutment backwall — fill material visible — flagged for repair
+   - Scour at Pier 1 footing: Streambed elevation checked — no new scour detected since last inspection
+   - Condition Rating: 5 (Fair)
+
+4. CHANNEL AND CHANNEL PROTECTION:
+   - Creek bank erosion on east side of Pier 1 — approximately 4 feet of bank lost since July 2023 inspection
+   - Riprap displaced downstream — needs replacement
+   - No debris accumulation at waterline
+   - Condition Rating: 4 (Poor) — ACTION REQUIRED
+
+=== SAFETY ISSUES ===
+- Bridge rail has two broken posts at Station 0+22 (south side) — PRIORITY REPAIR
+- Warning: Load posting inspection required — current posting may need review based on deck deterioration
+
+=== PREVIOUS INSPECTION COMPARISON ===
+July 2023 Inspection (Inspector: Sarah Chen):
+- Overall Rating was 6 (Satisfactory)
+- Deck cracks noted but smaller (0.3mm-1.2mm)
+- Girder rust was not present in July 2023
+- Creek bank erosion has accelerated — 4 feet loss in 6 months
+
+DETERIORATION TREND: Accelerating — recommend moving to quarterly inspection cycle.
+
+=== RECOMMENDED ACTIONS ===
+Priority 1 (Immediate — within 30 days):
+  - Repair broken bridge rail posts (Safety hazard)
+  - Install erosion control at east bank of Pier 1
+
+Priority 2 (Within 6 months):
+  - Mill and overlay deck surface — Sections 2 and 3
+  - Clean and paint steel girders G2, G3, G4
+  - Repair wingwall separation at North Abutment
+  - Replace displaced riprap
+
+Priority 3 (Within 1 year):
+  - Full deck condition survey with GPR (Ground Penetrating Radar)
+  - Load rating analysis update
+
+=== LOAD RATING ===
+Current Operating Rating: HS-20
+Current Inventory Rating: HS-15
+Recommendation: Re-evaluate after deck repairs
+
+=== PHOTOGRAPHS ===
+Photos 1-12 attached separately (filed under DEST-2024-001-PHOTOS)
+Key photos: Deck cracking (P3, P4), Girder rust (P7), Bank erosion (P10, P11)
+
+=== NEXT INSPECTION ===
+Recommended: April 2024 (3-month follow-up due to accelerated deterioration)
+Standard next: July 2024
+
+Signed: James Harrington, P.E.
+Date: January 17, 2024

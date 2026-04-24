@@ -1,0 +1,46 @@
+PROJECT: SR-45 Bridge Over Millbrook Creek
+PROJECT ID: DEST-2024-001
+LOCATION: Highway SR-45, Mile Marker 12.3, Riverside County
+INSPECTION DATE: July 18, 2023
+INSPECTOR: Sarah Chen (License #CE-65219)
+INSPECTION TYPE: Routine Biannual Structural Inspection
+
+=== EXECUTIVE SUMMARY ===
+The SR-45 bridge was inspected on July 18, 2023. Weather conditions: Clear, 87°F.
+Bridge built 1987. Overall condition rating: SATISFACTORY (Rating: 6/9).
+
+=== FINDINGS SUMMARY ===
+
+DECK:
+- Early-stage transverse cracking — hairline to 1.2mm width
+- Surface wear on travel lanes — 15 years since last overlay
+- Condition Rating: 6
+
+SUPERSTRUCTURE:
+- Steel girders in good condition — no rust visible
+- All connections tight
+- Bearing pads: Good condition at all locations
+- Condition Rating: 6
+
+SUBSTRUCTURE:
+- Pier 1: Horizontal crack on pier cap — sealed with epoxy (repair completed June 2023)
+  Crack length: 14 inches, depth: surface only
+- Pier 2: Good
+- Abutments: Good condition
+- Condition Rating: 6
+
+CHANNEL:
+- Minor bank erosion west side upstream — not critical
+- Riprap in good condition
+- Condition Rating: 6
+
+=== MAINTENANCE ITEMS ===
+- Monitor Pier 1 crack repair — re-inspect in 6 months
+- Plan for deck overlay within 2-3 years
+- Clean drainage scuppers (3 blocked)
+
+=== NEXT INSPECTION ===
+January 2024 (Standard Biannual)
+
+Signed: Sarah Chen, P.E.
+Date: July 20, 2023

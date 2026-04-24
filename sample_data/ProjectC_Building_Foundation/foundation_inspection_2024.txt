@@ -1,0 +1,114 @@
+PROJECT: Riverside Commercial Complex - Foundation Investigation
+PROJECT ID: DEST-2024-078
+LOCATION: 4521 Commerce Drive, Riverside, CA 92501
+INSPECTION DATE: February 20, 2024
+INSPECTOR: Angela Martinez, P.E., G.E. (License #GE-4892)
+INSPECTION TYPE: Forensic Foundation Investigation - Settlement Complaint
+
+=== BACKGROUND ===
+The owner (Riverside Commerce LLC) reported observable settlement and cracking in the building structure. The building is a 3-story commercial building built in 2018. Building area: 42,000 sq ft. Foundation type: Shallow spread footings on native soil.
+
+Complaints received:
+- Visible diagonal cracking in exterior masonry walls
+- Doors on the east wing not closing properly (frame distortion)
+- Sloping floors on Level 1 east wing (measured up to 1.5 inches over 20 ft)
+- Interior partition wall cracks (multiple locations)
+
+=== INVESTIGATION SCOPE ===
+1. Visual inspection of structure
+2. Floor elevation survey
+3. Review of original geotechnical report
+4. Soil borings (4 new borings — B-1 through B-4)
+5. Laboratory testing of soil samples
+
+=== VISUAL INSPECTION FINDINGS ===
+
+EXTERIOR:
+- Stair-step cracking in brick veneer at northeast corner — significant (crack widths to 1/4 inch)
+- Settlement crack at building re-entrant corner (east elevation) — vertical offset 3/8 inch
+- Concrete apron slab at loading dock: settled 2.5 inches, cracked
+- Window frames distorted — east wing, floors 1 and 2
+
+INTERIOR (Level 1):
+- Grid Lines D-F (east portion): Diagonal cracks in drywall — consistent with differential settlement
+- Column bases at Grid D-4 and D-5: Visual gap forming between column baseplate and grout
+- Hardwood flooring in lease space A: Buckled — 1.2 inch rise over 8 feet
+
+INTERIOR (Level 2 and 3):
+- Less severe cracking — pattern consistent with settlement in foundation, not superstructure
+
+=== FLOOR ELEVATION SURVEY ===
+Survey performed by licensed surveyor (attached — DEST-2024-078-SURVEY)
+Key findings:
+- Maximum settlement measured: 3.2 inches (northeast corner, Grid D-F area)
+- Settlement gradient: 1.5 inches over 15 feet at worst location
+- Settlement pattern: Consistent with localized soil compression in northeast quadrant
+
+=== GEOTECHNICAL FINDINGS ===
+
+Original 2017 Geotechnical Report (Soil Tech Inc.):
+- Native soil: Sandy silt with clay layers
+- Bearing capacity assumed: 1,500 psf
+- No groundwater encountered (borings to 30 ft)
+- No expansive soil testing performed (CONCERN)
+
+New Borings (February 2024):
+Boring B-1 (northeast corner — settlement area):
+- 0-3 ft: Fill material (construction debris mixed with clay) — NOT in original report
+- 3-12 ft: Sandy silt, loose to medium dense
+- 12-25 ft: Clay layer, soft to medium — plasticity index = 42 (HIGH)
+- 25-35 ft: Dense sand (suitable bearing)
+
+Boring B-2 (center of building):
+- 0-2 ft: Fill
+- 2-15 ft: Sandy silt, medium dense
+- 15-35 ft: Dense sand
+Note: No significant clay layer — explains why center is not settling
+
+Laboratory Results:
+- B-1 clay sample: Liquid Limit = 58, Plastic Limit = 16, PI = 42
+- Swell test: 4.2% swell under 200 psf surcharge — EXPANSIVE SOIL
+- Consolidation test: Compression index Cc = 0.31 (moderate consolidation potential)
+
+=== ROOT CAUSE ANALYSIS ===
+PRIMARY CAUSE: Undisclosed fill material (0-3 ft) combined with soft clay layer (12-25 ft) not identified in original geotechnical investigation. The soft clay layer is undergoing consolidation settlement under building loads.
+
+CONTRIBUTING FACTORS:
+1. Expansive clay reacting to moisture fluctuations (irrigation system nearby)
+2. Original geotechnical report did not include exploratory borings in the northeast quadrant
+3. Foundation design may have been inadequate for actual soil conditions
+
+=== SETTLEMENT PROGNOSIS ===
+Based on consolidation analysis:
+- Estimated remaining settlement: 1.5 - 2.5 inches additional
+- Estimated time to reach 90% consolidation: 18-36 months
+- Settlement will continue without remediation
+
+=== RECOMMENDED REMEDIATION ===
+
+Option 1 (Recommended): Underpinning with Helical Piers
+- Install helical piers to dense sand layer (approximately 30 ft depth)
+- Estimated 28 piers at northeast quadrant
+- Lift and re-level building after pier installation
+- Estimated cost: $380,000 - $450,000
+
+Option 2: Grout Injection (Compaction Grouting)
+- Fill and densify loose zone (0-12 ft)
+- Less effective for deep clay consolidation
+- Estimated cost: $180,000 - $240,000 (may not be sufficient)
+
+RECOMMENDATION: Proceed with Option 1 (Helical Piers) for long-term stability.
+
+=== IMMEDIATE SAFETY CONCERNS ===
+- Monitor column baseplates at D-4 and D-5 — install settlement monitoring points
+- Do not occupy east wing Level 1 tenant space A until structural engineer reviews
+- Restrict heavy equipment/loading in northeast quadrant
+
+=== NEXT STEPS ===
+1. Structural engineer to review framing for distress
+2. Obtain remediation contractor quotes (3 minimum)
+3. Notify building department of settlement condition
+4. Establish settlement monitoring program (monthly readings)
+
+Signed: Angela Martinez, P.E., G.E.
+Date: February 23, 2024

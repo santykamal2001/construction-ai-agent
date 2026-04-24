@@ -1,0 +1,25 @@
+# Core
+streamlit>=1.35.0
+anthropic>=0.30.0
+python-dotenv>=1.0.0
+
+# Vector DB
+chromadb>=0.5.0
+
+# Embeddings (local, no API key needed)
+sentence-transformers>=3.0.0
+
+# File extraction
+pymupdf>=1.24.0          # PDF (fast, best quality)
+pypdf>=4.0.0             # PDF fallback
+python-docx>=1.1.0       # Word documents
+openpyxl>=3.1.0          # Excel files
+python-pptx>=0.6.23      # PowerPoint files
+
+# OCR (for scanned/image PDFs)
+paddlepaddle>=2.6.0
+paddleocr>=2.7.0
+
+# Data & Visualization
+pandas>=2.0.0
+plotly>=5.18.0

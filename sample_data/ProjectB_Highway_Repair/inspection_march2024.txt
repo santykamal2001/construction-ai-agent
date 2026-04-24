@@ -1,0 +1,84 @@
+PROJECT: US-78 Pavement Rehabilitation - Segment 4
+PROJECT ID: DEST-2024-042
+LOCATION: US-78 from Mile Post 45.2 to Mile Post 52.8
+INSPECTION DATE: March 5, 2024
+INSPECTOR: Robert Nguyen (License #CE-91203)
+INSPECTION TYPE: Pre-Construction Pavement Condition Survey
+
+=== PAVEMENT CONDITION SURVEY RESULTS ===
+
+TOTAL SURVEY LENGTH: 7.6 miles (both directions = 15.2 lane-miles)
+
+DISTRESS TYPES OBSERVED:
+
+1. ALLIGATOR CRACKING (Fatigue Cracking):
+   - Total area: 14,200 sq ft (High severity)
+   - Primary locations: MP 46.1-46.8 (both lanes), MP 49.2-49.6 (right lane)
+   - Indicates base failure — full-depth reclamation recommended in these zones
+
+2. LONGITUDINAL CRACKING:
+   - Total length: 3.8 miles
+   - Severity: Low to Medium
+   - Primarily in wheel paths
+   - Sealable with crack filling treatment
+
+3. TRANSVERSE CRACKING:
+   - 847 individual cracks counted
+   - Average spacing: 50 feet
+   - Typical thermal/reflection cracking from underlying layers
+
+4. RUTTING:
+   - Maximum rut depth: 0.85 inches (MP 47.3, right lane)
+   - Average rut depth: 0.31 inches
+   - Areas exceeding 0.5 inches: 2.1 miles
+
+5. POTHOLES:
+   - Count: 234 potholes
+   - Total area: 890 sq ft
+   - Require immediate patching before winter
+
+6. EDGE DETERIORATION:
+   - Shoulder drop-off >2 inches along 4.2 miles of right edge
+
+=== PAVEMENT CONDITION INDEX (PCI) ===
+Segment-by-segment PCI scores:
+- MP 45.2 - 46.0: PCI 42 (Poor)
+- MP 46.0 - 47.0: PCI 28 (Very Poor)
+- MP 47.0 - 48.5: PCI 51 (Fair)
+- MP 48.5 - 50.0: PCI 63 (Good)
+- MP 50.0 - 51.5: PCI 45 (Poor)
+- MP 51.5 - 52.8: PCI 38 (Poor)
+Overall Average PCI: 44.5 (Poor)
+
+=== DRAINAGE ASSESSMENT ===
+- 12 cross-culverts inspected
+- 3 culverts partially blocked (MP 46.8, 49.1, 51.3) — CLEAN IMMEDIATELY
+- Roadside ditches: Adequate in most locations; erosion at MP 48.2 and 52.1
+- Curb and gutter: N/A (rural highway)
+
+=== RECOMMENDED TREATMENT STRATEGY ===
+
+Zone 1 (MP 46.0-47.0): Full Depth Reclamation (FDR) + 4" HMA overlay
+Zone 2 (MP 45.2-46.0, 47.0-48.5, 50.0-52.8): Mill 2" + HMA overlay
+Zone 3 (MP 48.5-50.0): Crack seal + micro-surfacing (preserve good section)
+
+ESTIMATED QUANTITIES:
+- FDR: 1.0 mile = 28,000 sq yd
+- Mill & Overlay: 5.6 miles = 156,800 sq yd
+- Crack Seal: 3.8 miles
+- Pothole Patching (immediate): 890 sq ft
+
+ESTIMATED COST: $4.2M - $4.8M
+
+=== SAFETY OBSERVATIONS ===
+- Missing delineators: 14 locations
+- Faded pavement markings: Entire segment — re-stripe required
+- Guardrail damage: MP 48.7 (hit by vehicle, previous incident)
+- Sight distance issue: Overgrown vegetation at MP 51.2 — notify maintenance
+
+=== PHOTOS ===
+Survey photos: 156 photos filed under DEST-2024-042-SURVEY-PHOTOS
+Drone survey video: Filed separately (DEST-2024-042-DRONE-20240305.mp4)
+
+Signed: Robert Nguyen, P.E.
+Date: March 8, 2024
